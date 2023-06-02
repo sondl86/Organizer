@@ -4,9 +4,11 @@ import { Appointment } from "../../../app/models/Appointment";
 
 interface Props{
     appointment : Appointment;
+    cancelSelectAppointment : () => void;
+    openForm : (id : String) => void;
 }
 
-export default function AppointmentDetail( {appointment } : Props) {
+export default function AppointmentDetail( {appointment, cancelSelectAppointment, openForm } : Props) {
     return (
         <Card fluid>
             <Image src={`/assets/categoryImages/${appointment.category}.png`}/>
@@ -21,8 +23,13 @@ export default function AppointmentDetail( {appointment } : Props) {
             </Card.Content>
             <Card.Content extra>
                 <Button.Group width='2'>
-                    <Button basic color="yellow" content='Edit'/> 
-                    <Button basic color="grey" content='Cancel'/> 
+                    <Button 
+                        onClick={() => openForm(appointment.id)}
+                        basic color="yellow" content='Edit'/> 
+                    <Button 
+                        // here withour parenthesis, because we passing no parameters down
+                        onClick={cancelSelectAppointment}
+                        basic color="grey" content='Cancel'/> 
                 </Button.Group>
             </Card.Content>
         </Card>
