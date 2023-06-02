@@ -4,9 +4,11 @@ import { Button, Item, Label, Segment } from "semantic-ui-react";
 
 interface Props{
     appointments : Appointment[];
+    selectAppointment : (id : string) => void;
+    deleteAppointment : (id : string) => void;
 }
 
-export default function AppointmentList({appointments}: Props) {
+export default function AppointmentList({appointments, selectAppointment, deleteAppointment}: Props) {
     return (
         <Segment>
             <Item.Group divided>
@@ -20,7 +22,13 @@ export default function AppointmentList({appointments}: Props) {
                                 <div>{appointment.city}, {appointment.address}</div>
                             </Item.Description>
                             <Item.Extra>
-                                <Button floated='right' content='View' color="yellow"/>
+                                <Button 
+                                    //this way the function doesnt immediately execute, only when its clicked
+                                    onClick={() => selectAppointment(appointment.id)}
+                                    floated='right' content='View' color="yellow"/>
+                                <Button 
+                                    onClick={() => deleteAppointment(appointment.id)}
+                                    floated='right' content='Delete' color="red"/>
                                 <Label basic content={appointment.category}/>
                             </Item.Extra>
                         </Item.Content>
