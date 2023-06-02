@@ -15,12 +15,13 @@ interface Props {
     closeForm : () => void;
     createOrEdit: (appointment : Appointment) => void;
     deleteAppointment : (id : string) => void;
+    submitting: boolean;
 }
 
 //destructure activity properties that we passing down
 export default function ActivityDashboard({appointments, selectAppointment, 
         selectedAppointment, cancelSelectAppointment, editMode, openForm, 
-        closeForm, createOrEdit, deleteAppointment}: Props) {
+        closeForm, createOrEdit, deleteAppointment, submitting}: Props) {
     return (
         <Grid>
             <Grid.Column width='10'>
@@ -28,6 +29,7 @@ export default function ActivityDashboard({appointments, selectAppointment,
                     appointments={appointments} 
                     selectAppointment={selectAppointment}
                     deleteAppointment={deleteAppointment}
+                    submitting={submitting}
                     ></ActivityList>
             </Grid.Column>
             <Grid.Column width='6'>
@@ -43,6 +45,7 @@ export default function ActivityDashboard({appointments, selectAppointment,
                     closeForm={closeForm} 
                     appointment={selectedAppointment}
                     createOrEdit={createOrEdit}
+                    submitting={submitting}
                 ></AppointmentForm> }          
             </Grid.Column>
         </Grid>

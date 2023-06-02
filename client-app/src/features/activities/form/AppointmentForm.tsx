@@ -6,9 +6,11 @@ interface Props {
     appointment : Appointment | undefined;
     closeForm : () => void;
     createOrEdit: (appointment : Appointment) => void;
+    submitting: boolean;
 }
 
-export default function AppointmentForm ({closeForm, appointment: selectedAppointment, createOrEdit} : Props) {
+export default function AppointmentForm ({closeForm, appointment: selectedAppointment, 
+        createOrEdit, submitting} : Props) {
 
     //if appointment is null than anything to the right is used for initial state
     const initialState = selectedAppointment ?? {
@@ -48,7 +50,7 @@ export default function AppointmentForm ({closeForm, appointment: selectedAppoin
                 <Form.Input placeholder="Category" value={appointment?.category} name='category' 
                     onChange={handleInputChange}>
                 </Form.Input>
-                <Form.Input placeholder="Date" value={appointment?.date} name='date' 
+                <Form.Input type='date' placeholder="Date" value={appointment?.date} name='date' 
                     onChange={handleInputChange}></Form.Input>
                 <Form.Input placeholder="City" value={appointment?.city} name='city' 
                     onChange={handleInputChange}>
@@ -56,9 +58,8 @@ export default function AppointmentForm ({closeForm, appointment: selectedAppoin
                 <Form.Input placeholder="Address" value={appointment?.address} name='address' 
                     onChange={handleInputChange}>
                 </Form.Input>
-                <Button floated="right" color="yellow" type="submit" content="Submit"/>
-                <Button onClick={closeForm}
-                    floated="right" type="button" content="Cancel"/>
+                <Button loading={submitting} floated="right" color="yellow" type="submit" content="Submit"/>
+                <Button onClick={closeForm} floated="right" type="button" content="Cancel"/>
             </Form>
         </Segment>
     )
