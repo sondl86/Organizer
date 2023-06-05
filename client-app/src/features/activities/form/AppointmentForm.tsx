@@ -1,16 +1,12 @@
 import React, { ChangeEvent, useState } from "react";
 import { Button, Form, Segment } from "semantic-ui-react";
-import { Appointment } from "../../../app/models/Appointment";
+import { useStore } from "../../../app/stores/store";
+import { observer } from "mobx-react-lite";
 
-interface Props {
-    appointment : Appointment | undefined;
-    closeForm : () => void;
-    createOrEdit: (appointment : Appointment) => void;
-    submitting: boolean;
-}
+export default observer(function AppointmentForm () {
 
-export default function AppointmentForm ({closeForm, appointment: selectedAppointment, 
-        createOrEdit, submitting} : Props) {
+    const {appointmentStore} = useStore()
+    const {selectedAppointment, closeForm, createAppointment, updateAppoitment, loading} = appointmentStore
 
     //if appointment is null than anything to the right is used for initial state
     const initialState = selectedAppointment ?? {
@@ -26,7 +22,7 @@ export default function AppointmentForm ({closeForm, appointment: selectedAppoin
     const [appointment, setAppointment] = useState(initialState);
 
     function handleSubmit(){
-        createOrEdit(appointment)
+        appointment.id ? updateAppoitment(appointment) : createAppointment(appointment)    
     }
 
     function handleInputChange(event : ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -58,9 +54,9 @@ export default function AppointmentForm ({closeForm, appointment: selectedAppoin
                 <Form.Input placeholder="Address" value={appointment?.address} name='address' 
                     onChange={handleInputChange}>
                 </Form.Input>
-                <Button loading={submitting} floated="right" color="yellow" type="submit" content="Submit"/>
+                <Button loading={loading} floated="right" color="yellow" type="submit" content="Submit"/>
                 <Button onClick={closeForm} floated="right" type="button" content="Cancel"/>
             </Form>
         </Segment>
     )
-}
+})

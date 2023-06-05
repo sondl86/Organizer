@@ -1,14 +1,15 @@
 import React from "react";
-import { Button, Card, Icon, Image } from "semantic-ui-react";
-import { Appointment } from "../../../app/models/Appointment";
+import { Button, Card, Image } from "semantic-ui-react";
+import { useStore } from "../../../app/stores/store";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
-interface Props{
-    appointment : Appointment;
-    cancelSelectAppointment : () => void;
-    openForm : (id : String) => void;
-}
+export default function AppointmentDetail() {
 
-export default function AppointmentDetail( {appointment, cancelSelectAppointment, openForm } : Props) {
+    const {appointmentStore} = useStore()
+    const { selectedAppointment: appointment, openForm, cancelSelectedAppointment } = appointmentStore
+
+    if(!appointment) return <LoadingComponent />
+
     return (
         <Card fluid>
             <Image src={`/assets/categoryImages/${appointment.category}.png`}/>
@@ -28,7 +29,7 @@ export default function AppointmentDetail( {appointment, cancelSelectAppointment
                         basic color="yellow" content='Edit'/> 
                     <Button 
                         // here withour parenthesis, because we passing no parameters down
-                        onClick={cancelSelectAppointment}
+                        onClick={cancelSelectedAppointment}
                         basic color="grey" content='Cancel'/> 
                 </Button.Group>
             </Card.Content>
