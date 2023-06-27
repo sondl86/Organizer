@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Card, Image } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
+import { observer } from "mobx-react-lite";
+import { useParams } from "react-router-dom";
 
-export default function AppointmentDetail() {
+export default observer(function AppointmentDetail() {
 
     const {appointmentStore} = useStore()
-    const { selectedAppointment: appointment, openForm, cancelSelectedAppointment } = appointmentStore
+    const { selectedAppointment: appointment, loadAppointment, loadingInitial } = appointmentStore
+    const {id} = useParams()
 
-    if(!appointment) return <LoadingComponent />
+    useEffect(() => {
+        if(id) loadAppointment(id)
+    }, [id, loadAppointment])
+
+    if(loadingInitial || !appointment) return <LoadingComponent />
 
     return (
         <Card fluid>
@@ -24,15 +31,10 @@ export default function AppointmentDetail() {
             </Card.Content>
             <Card.Content extra>
                 <Button.Group width='2'>
-                    <Button 
-                        onClick={() => openForm(appointment.id)}
-                        basic color="yellow" content='Edit'/> 
-                    <Button 
-                        // here withour parenthesis, because we passing no parameters down
-                        onClick={cancelSelectedAppointment}
-                        basic color="grey" content='Cancel'/> 
+                    <Button basic color="yellow" content='Edit'/> 
+                    <Button basic color="grey" content='Cancel'/> 
                 </Button.Group>
             </Card.Content>
         </Card>
     )
-}
+})

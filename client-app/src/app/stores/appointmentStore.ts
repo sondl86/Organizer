@@ -20,11 +20,11 @@ export default class AppointmentStore{
     }
 
     loadAppointments = async () => {
+        this.setLoadingInitial(true)
         try{
             const appointments = await agent.Appointments.list()
             appointments.forEach(appointment => {
-                appointment.date = appointment.date.split('T')[0]
-                this.appointmentRegistry.set(appointment.id, appointment)
+                this.setAppointment(appointment)
             })
             this.setLoadingInitial(false)
         }catch(error){
@@ -32,27 +32,35 @@ export default class AppointmentStore{
             this.setLoadingInitial(false)
         }
     }
+
+    loadAppointment = async (id: string) => {
+        let appointment = this.getAppointment(id)
+        if(appointment) this.selectedAppointment = appointment
+        else {
+            this.setLoadingInitial(true)
+            try{
+                appointment = await agent.Appointments.details(id)
+                this.setAppointment(appointment)
+                this.selectedAppointment = appointment
+                this.setLoadingInitial(false)
+            }catch(error){
+                console.log(error)
+                this.setLoadingInitial(false)
+            }
+        }
+    } 
+
+    private setAppointment = (appointment : Appointment) => {
+        appointment.date = appointment.date.split('T')[0]
+        this.appointmentRegistry.set(appointment.id, appointment)
+    }
+
+    private getAppointment = (id: string) => {
+        return this.appointmentRegistry.get(id)
+    }
     
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
-    }
-
-    selectAppointment = (id: string) => {
-        this.selectedAppointment = this.appointmentRegistry.get(id)
-        //this.selectedAppointment = this.appointments.find(x => x.id === id)
-    }
-
-    cancelSelectedAppointment = () =>  {
-        this.selectedAppointment = undefined;
-    }
-
-    openForm = (id?: string) => {
-        id ? this.selectAppointment(id) : this.cancelSelectedAppointment()
-        this.editMode = true
-    }
-
-    closeForm = () => {
-        this.editMode = false
     }
 
     createAppointment = async (appointment: Appointment) => {

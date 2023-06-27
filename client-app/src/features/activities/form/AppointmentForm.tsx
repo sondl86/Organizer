@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite";
 export default observer(function AppointmentForm () {
 
     const {appointmentStore} = useStore()
-    const {selectedAppointment, closeForm, createAppointment, updateAppoitment, loading} = appointmentStore
+    const {selectedAppointment, createAppointment, updateAppoitment, loading} = appointmentStore
 
     //if appointment is null than anything to the right is used for initial state
     const initialState = selectedAppointment ?? {
@@ -55,7 +55,7 @@ export default observer(function AppointmentForm () {
                     onChange={handleInputChange}>
                 </Form.Input>
                 <Button loading={loading} floated="right" color="yellow" type="submit" content="Submit"/>
-                <Button onClick={closeForm} floated="right" type="button" content="Cancel"/>
+                <Button floated="right" type="button" content="Cancel"/>
             </Form>
         </Segment>
     )

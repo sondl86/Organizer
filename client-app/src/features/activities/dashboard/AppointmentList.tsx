@@ -2,11 +2,12 @@ import React, { SyntheticEvent, useState } from "react";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
+import { Link } from "react-router-dom";
 
 export default observer(function AppointmentList() {
     
     const { appointmentStore } = useStore();
-    const { loading, appointmentsByDate, deleteAppointment, selectAppointment } = appointmentStore
+    const { loading, appointmentsByDate, deleteAppointment } = appointmentStore
 
     const [target, setTarget] = useState('');
 
@@ -28,9 +29,7 @@ export default observer(function AppointmentList() {
                                 <div>{appointment.city}, {appointment.address}</div>
                             </Item.Description>
                             <Item.Extra>
-                                <Button 
-                                    //this way the function doesnt immediately execute, only when its clicked
-                                    onClick={() => selectAppointment(appointment.id)}
+                                <Button as={Link} to={`/appointments/${appointment.id}`}
                                     floated='right' content='View' color="yellow"/>
                                 <Button 
                                     name={appointment.id}
