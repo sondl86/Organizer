@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Core;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -10,12 +12,19 @@ namespace Application.Appointments
 {
     public class Create
     {
-        // command is not returning anything
-        public class Command : IRequest{
+        // command is not returning anything, we use Unit, because we dont return an appointment
+        public class Command : IRequest<Result<Unit>>{
             public Appointment Appointment { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class CommandValidator : AbstractValidator<Command>{
+            public CommandValidator()
+            {
+                RuleFor(x => x.Appointment).SetValidator(new AppointmentValidator());
+            }
+        }
+
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
         public DataContext _context { get; }
             public Handler(DataContext context)
@@ -23,13 +32,13 @@ namespace Application.Appointments
                 _context = context;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 _context.Appointments.Add(request.Appointment);
-
-                await _context.SaveChangesAsync();
-
-                return Unit.Value;
+                // if nothing is written to the database than result is false, otherwise if the number of changes is greater than 0 than result is true
+                var result = await _context.SaveChangesAsync() > 0;
+                if(!result) return Result<Unit>.Failure("Failed to create appointment");
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }
