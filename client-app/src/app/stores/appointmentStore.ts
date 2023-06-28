@@ -19,6 +19,17 @@ export default class AppointmentStore{
             Date.parse(a.date) - Date.parse(b.date))
     }
 
+    get groupedAppointemnts(){
+        return Object.entries(
+            this.appointmentsByDate.reduce((appointments, appointment) => {
+                const date = appointment.date
+                // we look if there is a match on appointment date
+                appointments[date] = appointments[date] ? [...appointments[date], appointment] : [appointment]
+                return appointments
+            }, {} as {[key: string] :  Appointment[]})
+        )
+    }
+
     loadAppointments = async () => {
         this.setLoadingInitial(true)
         try{
