@@ -8,7 +8,7 @@ export default class AppointmentStore{
     selectedAppointment: Appointment | undefined = undefined;
     editMode = false;
     loading = false;
-    loadingInitial = true;
+    loadingInitial = false;
 
     constructor(){
         makeAutoObservable(this)
@@ -35,14 +35,18 @@ export default class AppointmentStore{
 
     loadAppointment = async (id: string) => {
         let appointment = this.getAppointment(id)
-        if(appointment) this.selectedAppointment = appointment
-        else {
+        if(appointment) {
+            this.selectedAppointment = appointment
+            return appointment
+        }
+            else {
             this.setLoadingInitial(true)
             try{
                 appointment = await agent.Appointments.details(id)
                 this.setAppointment(appointment)
-                this.selectedAppointment = appointment
+                runInAction(() => this.selectedAppointment = appointment)
                 this.setLoadingInitial(false)
+                return appointment
             }catch(error){
                 console.log(error)
                 this.setLoadingInitial(false)

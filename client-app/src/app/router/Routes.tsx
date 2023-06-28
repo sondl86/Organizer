@@ -9,11 +9,13 @@ export const routes: RouteObject[] = [
     {
         path: '/',
         element: <App /> ,
+        //the children are replaced in the Outlet component
         children: [
-            {path: '', element: <HomePage />},
             {path: 'appointments', element: <AppointmentDashboard />},
             {path: 'appointments/:id', element: <AppointmentDetail />},
-            {path: 'createAppointment', element: <AppointmentForm />},
+            {path: 'createAppointment', element: <AppointmentForm key="create"/>},
+            {path: 'manage/:id', element: <AppointmentForm key="manage" />},
+            
         ]
     }
 ]

@@ -3,7 +3,7 @@ import { Button, Card, Image } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { observer } from "mobx-react-lite";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export default observer(function AppointmentDetail() {
 
@@ -31,8 +31,8 @@ export default observer(function AppointmentDetail() {
             </Card.Content>
             <Card.Content extra>
                 <Button.Group width='2'>
-                    <Button basic color="yellow" content='Edit'/> 
-                    <Button basic color="grey" content='Cancel'/> 
+                    <Button as={Link} to={`/manage/${appointment.id}`} basic color="yellow" content='Edit'/> 
+                    <Button as={Link} to='/appointments' basic color="grey" content='Cancel'/> 
                 </Button.Group>
             </Card.Content>
         </Card>

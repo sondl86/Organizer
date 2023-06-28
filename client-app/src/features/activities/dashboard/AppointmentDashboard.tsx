@@ -11,11 +11,13 @@ import LoadingComponent from "../../../app/layout/LoadingComponent";
 export default observer(function ActivityDashboard() {
     
     const {appointmentStore} = useStore()
-    const {selectedAppointment, editMode } = appointmentStore
+    const {loadAppointments, appointmentRegistry} = appointmentStore
 
     useEffect(() => {
-        appointmentStore.loadAppointments();
-    }, [appointmentStore])
+        if(appointmentRegistry.size <= 1){
+            loadAppointments();
+        }
+    }, [loadAppointments, appointmentRegistry.size])
 
     if(appointmentStore.loadingInitial){
         return <LoadingComponent content='Loading app'/>

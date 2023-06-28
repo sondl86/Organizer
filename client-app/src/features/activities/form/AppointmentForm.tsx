@@ -1,15 +1,20 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button, Form, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { Appointment } from "../../../app/models/Appointment";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
+import {v4 as uuid} from "uuid"
 
 export default observer(function AppointmentForm () {
 
     const {appointmentStore} = useStore()
-    const {selectedAppointment, createAppointment, updateAppoitment, loading} = appointmentStore
+    const {selectedAppointment, createAppointment, updateAppoitment, loading, loadAppointment, loadingInitial} = appointmentStore
+    const {id} = useParams()
+    const navigate = useNavigate()
 
-    //if appointment is null than anything to the right is used for initial state
-    const initialState = selectedAppointment ?? {
+    const [appointment, setAppointment] = useState<Appointment>({
         id: '',
         title: '',
         category: '',
@@ -17,12 +22,19 @@ export default observer(function AppointmentForm () {
         date: '',
         city: '',
         address: ''
-    }
+    });
 
-    const [appointment, setAppointment] = useState(initialState);
+    useEffect(() => {
+        if (id) loadAppointment(id).then(appointment => setAppointment(appointment!))
+    },[id, loadAppointment])
 
     function handleSubmit(){
-        appointment.id ? updateAppoitment(appointment) : createAppointment(appointment)    
+        if (!appointment.id) {
+            appointment.id = uuid()
+            createAppointment(appointment).then(() => navigate(`/appointments/${appointment.id}`))
+        }else{
+            updateAppoitment(appointment).then(() => navigate(`/appointments/${appointment.id}`))
+        }
     }
 
     function handleInputChange(event : ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -32,6 +44,8 @@ export default observer(function AppointmentForm () {
         //the property with the key of name - should be set to - whatever the value is inside this inputs element
         setAppointment({...appointment, [name]: value})
     }
+
+    if(loadingInitial) return <LoadingComponent content="Loading appointment..."/>
 
     return (
         //clears any previously floats in our html
@@ -55,7 +69,7 @@ export default observer(function AppointmentForm () {
                     onChange={handleInputChange}>
                 </Form.Input>
                 <Button loading={loading} floated="right" color="yellow" type="submit" content="Submit"/>
-                <Button floated="right" type="button" content="Cancel"/>
+                <Button as={Link} to='/appointments' floated="right" type="button" content="Cancel"/>
             </Form>
         </Segment>
     )
