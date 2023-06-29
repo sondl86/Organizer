@@ -2,6 +2,7 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { Item, Button, Segment, ItemDescription, Icon } from "semantic-ui-react"
 import { Appointment } from "../../../app/models/Appointment"
+import { format } from 'date-fns'
 
 interface Props {
     appointment : Appointment
@@ -26,7 +27,7 @@ export default function AppointmentListItem({appointment}: Props) {
             </Segment>
             <Segment>
                 <span>
-                    <Icon name="clock"/> {appointment.date}
+                    <Icon name="clock"/> {format(appointment.date!, 'dd MMM yyyy h:mm aa')}
                     <Icon name="marker"/> {appointment.city}
                 </span>
             </Segment>

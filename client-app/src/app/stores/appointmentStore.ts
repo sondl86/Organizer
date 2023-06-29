@@ -2,6 +2,7 @@ import { Appointment } from './../models/Appointment';
 import { makeAutoObservable, runInAction } from 'mobx';
 import agent from '../api/agent';
 import {v4 as uuid } from 'uuid';
+import { format } from 'date-fns'
 
 export default class AppointmentStore{
     appointmentRegistry = new Map<string, Appointment>();
@@ -16,13 +17,13 @@ export default class AppointmentStore{
 
     get appointmentsByDate() {
         return Array.from(this.appointmentRegistry.values()).sort((a,b) => 
-            Date.parse(a.date) - Date.parse(b.date))
+            a.date!.getTime() - b.date!.getTime())
     }
 
     get groupedAppointemnts(){
         return Object.entries(
             this.appointmentsByDate.reduce((appointments, appointment) => {
-                const date = appointment.date
+                const date = format(appointment.date!, 'dd MMM yyyy')
                 // we look if there is a match on appointment date
                 appointments[date] = appointments[date] ? [...appointments[date], appointment] : [appointment]
                 return appointments
@@ -66,7 +67,8 @@ export default class AppointmentStore{
     } 
 
     private setAppointment = (appointment : Appointment) => {
-        appointment.date = appointment.date.split('T')[0]
+
+        appointment.date = new Date(appointment.date!)
         this.appointmentRegistry.set(appointment.id, appointment)
     }
 

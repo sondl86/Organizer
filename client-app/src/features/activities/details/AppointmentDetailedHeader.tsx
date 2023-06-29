@@ -1,7 +1,8 @@
 import { observer } from 'mobx-react-lite';
 import {Button, Header, Item, Segment, Image} from 'semantic-ui-react'
 import { Appointment } from '../../../app/models/Appointment';
-
+import { Link } from 'react-router-dom';
+import { format } from 'date-fns'
 
 const appointmentImageStyle = {
     filter: 'brightness(30%)'
@@ -35,7 +36,7 @@ export default observer (function appointmentDetailedHeader({appointment}: Props
                                     content={appointment.title}
                                     style={{color: 'white'}}
                                 />
-                                <p>{appointment.date}</p>
+                                <p>{format(appointment.date!, 'dd MMM yyyy')}</p>
                                 <p>
                                     Hosted by <strong>Bob</strong>
                                 </p>
@@ -47,7 +48,7 @@ export default observer (function appointmentDetailedHeader({appointment}: Props
             <Segment clearing attached='bottom'>
                 <Button color='purple'>Join appointment</Button>
                 <Button>Cancel attendance</Button>
-                <Button color='yellow' floated='right'>
+                <Button as={Link} to={`/manage/${appointment.id}`} color='yellow' floated='right'>
                     Manage Event
                 </Button>
             </Segment>

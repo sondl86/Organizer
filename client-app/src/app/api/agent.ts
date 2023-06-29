@@ -20,10 +20,7 @@ axios.interceptors.response.use(async response => {
     const {data, status, config} = error.response as AxiosResponse
     switch (status) {
         case 400:
-            if(config.method === 'get' && data.errors.hasOwnProperty('id')) {
-                router.navigate('/not-found')
-            }
-
+            
             if(data.errors){
                 const modalStateErrors = []
                 for (const key in data.errors){
@@ -34,6 +31,9 @@ axios.interceptors.response.use(async response => {
                 throw modalStateErrors.flat()
             }else{
                 toast.error(data)
+            }
+            if(config.method === 'get' && data.errors.hasOwnProperty('id')) {
+                router.navigate('/not-found')
             }
             break;
         case 401:

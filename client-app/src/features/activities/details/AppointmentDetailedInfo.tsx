@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite';
 import React from 'react'
 import {Segment, Grid, Icon} from 'semantic-ui-react'
 import {Appointment} from "../../../app/models/Appointment";
+import { format } from 'date-fns'
 
 interface Props {
     appointment: Appointment
@@ -28,7 +29,7 @@ export default observer(function appointmentDetailedInfo({appointment}: Props) {
                     </Grid.Column>
                     <Grid.Column width={15}>
             <span>
-              {appointment.date}
+              {format(appointment.date!, 'dd MMM yyyy h:mm aa')}
             </span>
                     </Grid.Column>
                 </Grid>
