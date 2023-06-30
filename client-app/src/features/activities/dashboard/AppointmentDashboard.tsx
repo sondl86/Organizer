@@ -19,7 +19,7 @@ export default observer(function ActivityDashboard() {
     }, [loadAppointments, appointmentRegistry.size])
 
     if(appointmentStore.loadingInitial){
-        return <LoadingComponent content='Loading app'/>
+        return <LoadingComponent content='Loading appointments...'/>
     }
     
     return (
