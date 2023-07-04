@@ -1,6 +1,6 @@
 export interface User {
     username: string;
-    displayNeame: string;
+    displayName: string;
     token: string;
     image?: null;
 }
@@ -8,6 +8,6 @@ export interface User {
 export interface UserFormValues {
     email: string;
     password: string;
-    displayNeame?: string;
+    displayName?: string;
     userName?: string;
 }

@@ -45,17 +45,19 @@ namespace API.Controllers
         {
             if(await _userManager.Users.AnyAsync(user => user.UserName == registerdDto.UserName))
             {
-                return BadRequest("Username is already taken");
+                ModelState.AddModelError("username", "Username taken");
+                return ValidationProblem(ModelState);
             }
 
             if(await _userManager.Users.AnyAsync(user => user.Email == registerdDto.Email))
             {
-                return BadRequest("Email is already taken");
+                ModelState.AddModelError("email", "Email taken");
+                return ValidationProblem(ModelState);
             }
 
             var user = new AppUser
             {
-                DisplayNeame = registerdDto.DisplayNeame,
+                DisplayName = registerdDto.DisplayName,
                 Email = registerdDto.Email,
                 UserName = registerdDto.UserName
             };
@@ -84,7 +86,7 @@ namespace API.Controllers
         {
             return new UserDto
             {
-                DisplayNeame = user.DisplayNeame,
+                DisplayName = user.DisplayName,
                 Image = null,
                 Token = _tokenService.CreateToken(user),
                 UserName = user.UserName
