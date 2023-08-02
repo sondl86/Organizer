@@ -14,7 +14,7 @@ export default observer(function NavBar() {
                     Personal Organizer
                 </Menu.Item>
                 <Menu.Item as={NavLink} to='/appointments' name="Appointments" />
-                <Menu.Item as={NavLink} to='/errors' name="Errors" />
+                {/* <Menu.Item as={NavLink} to='/errors' name="Errors" /> */}
                 <Menu.Item>
                     <Button as={NavLink} to='/createAppointment' color="yellow" content='Create Appointment'/>
                 </Menu.Item>

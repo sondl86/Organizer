@@ -1,6 +1,8 @@
-namespace Domain
+using Application.Profiles;
+
+namespace Application.Appointments
 {
-    public class Appointment
+    public class AppointmentDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -9,7 +11,8 @@ namespace Domain
         public string Category { get; set; }
         public string City { get; set; }    
         public string Address { get; set; }
+        public string HostUserName { get; set; }
         public bool IsCancelled { get; set; }
-        public ICollection<AppointmentAttendee> Attendees { get; set; } = new List<AppointmentAttendee>();
+        public ICollection<Profile> Attendees { get; set; }
     }
 }

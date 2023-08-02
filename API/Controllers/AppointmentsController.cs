@@ -1,3 +1,4 @@
+using Application;
 using Application.Appointments;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -5,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]
     public class AppointmentsController : BaseApiController
     {
         [HttpGet] //api/appointments
@@ -29,6 +29,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Create.Command {Appointment = appointment} ));
         }
 
+        [Authorize(Policy = "IsAppointmentHost")]
         [HttpPut("{id}")] 
         public async Task<IActionResult> EditAppointment (Guid id, Appointment appointment)
         {
@@ -36,10 +37,17 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Edit.Command {Appointment = appointment} ));
         }
 
+        [Authorize(Policy = "IsAppointmentHost")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAppointment (Guid id)
         {
             return HandleResult(await Mediator.Send(new Delete.Command {Id = id} ));
+        }
+
+        [HttpPost("{id}/attend")]
+        public async Task<IActionResult> Attend(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new UpdateAttendance.Command {Id = id} ));
         }
     }
 
