@@ -1,8 +1,10 @@
-import { Appointment } from './../models/Appointment';
+import { Appointment, AppointmentFormValues } from './../models/Appointment';
 import { makeAutoObservable, runInAction } from 'mobx';
 import agent from '../api/agent';
 import {v4 as uuid } from 'uuid';
 import { format } from 'date-fns'
+import { store } from './store';
+import { Profile } from '../models/Profile';
 
 export default class AppointmentStore{
     appointmentRegistry = new Map<string, Appointment>();
@@ -67,7 +69,14 @@ export default class AppointmentStore{
     } 
 
     private setAppointment = (appointment : Appointment) => {
-
+        const user = store.userStore.user;
+        if(user) {
+            appointment.isGoing = appointment.attendees!.some(
+                a => a.userName === user.userName
+            )
+            appointment.isHost = appointment.hostUserName === user.userName;
+            appointment.host = appointment.attendees!.find(x => x.userName === appointment.hostUserName);
+        }
         appointment.date = new Date(appointment.date!)
         this.appointmentRegistry.set(appointment.id, appointment)
     }
@@ -80,42 +89,38 @@ export default class AppointmentStore{
         this.loadingInitial = state;
     }
 
-    createAppointment = async (appointment: Appointment) => {
-        this.loading = true;
+    createAppointment = async (appointment: AppointmentFormValues) => {
+        const user = store.userStore.user
+        const attendee = new Profile(user!)
         appointment.id = uuid();
         try{
             await agent.Appointments.create(appointment)
+            const newAppointment = new Appointment(appointment)
+            newAppointment.hostUserName = user!.userName
+            newAppointment.attendees = [attendee]
+            this.setAppointment(newAppointment)
             runInAction(() => {
-               this.appointmentRegistry.set(appointment.id, appointment)
-               this.selectedAppointment = appointment
-               this.editMode = false
-               this.loading = false;
+               this.selectedAppointment = newAppointment
             })        
         }catch(error){
             console.log(error)
-            runInAction(() => {
-                this.loading = false;
-            }) 
+             
         }
     }
 
-    updateAppoitment = async (appointment: Appointment) => {
-        this.loading = true;
+    updateAppointment = async (appointment: AppointmentFormValues) => {
+        console.log("store: ", appointment)
         try{
             await agent.Appointments.update(appointment)
             runInAction(() => {
-                this.appointmentRegistry.set(appointment.id, appointment)
-                // [...] creates and replaces the current array :)
-                //this.appointments = [...this.appointments.filter(x => x.id !== appointment.id), appointment]
-                this.selectedAppointment = appointment
-                this.editMode = false
-                this.loading = false;
+                if(appointment.id){
+                    let updatedAppointment = {...this.getAppointment(appointment.id), ...appointment}
+                    this.appointmentRegistry.set(appointment.id, updatedAppointment as Appointment)
+                    this.selectedAppointment = updatedAppointment as Appointment
+                }
             })
         }catch(error){
             console.log(error)
-            runInAction(() => {
-                this.loading = false
-            })
         }
     }
 
@@ -133,6 +138,48 @@ export default class AppointmentStore{
             runInAction(() => {
                 this.loading = false
             })
+        }
+    }
+
+    updateAttendance = async () => {
+        const user = store.userStore.user
+        this.loading = true
+        try{
+            await agent.Appointments.attend(this.selectedAppointment!.id)
+            runInAction(() => {
+                if(this.selectedAppointment?.isGoing) {
+                    //to remove the currently logged in user 
+                    this.selectedAppointment.attendees = this. selectedAppointment.attendees?.filter(a => a.userName !== user?.userName)
+                    this.selectedAppointment.isGoing = false
+                }else{
+                    //if there are not going we create a new profile
+                    const attendee = new Profile(user!)
+                    this.selectedAppointment?.attendees?.push(attendee)
+                    this.selectedAppointment!.isGoing = true
+                }
+                //we update the appointment registry
+                this.appointmentRegistry.set(this.selectedAppointment!.id, this.selectedAppointment!)
+            })
+        }catch(error){
+            console.log(error)
+        }finally{
+            //no matter if there is an error or not, loading must be off
+            runInAction(() => this.loading = false )
+        }
+    }
+
+    cancelAppointmentToggle = async () => {
+        this.loading = true
+        try{
+            await agent.Appointments.attend(this.selectedAppointment!.id)
+            runInAction(() => {
+                this.selectedAppointment!.isCancelled = !this.selectedAppointment?.isCancelled
+                this.appointmentRegistry.set(this.selectedAppointment!.id, this.selectedAppointment!)
+            })
+        }catch(error){
+            console.log(error)
+        }finally{
+            runInAction(() => this.loading = false )
         }
     }
 }

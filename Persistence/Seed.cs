@@ -45,7 +45,7 @@ namespace Persistence
                         Title = "Past Appointment 1",
                         Date = DateTime.UtcNow.AddMonths(-2),
                         Description = "Appointment 2 months ago",
-                        Category = "drinks",
+                        Category = "leisure",
                         City = "London",
                         Address = "Pub",
                         Attendees = new List<AppointmentAttendee>
@@ -62,7 +62,7 @@ namespace Persistence
                         Title = "Past Appointment 2",
                         Date = DateTime.UtcNow.AddMonths(-1),
                         Description = "Appointment 1 month ago",
-                        Category = "culture",
+                        Category = "work",
                         City = "Paris",
                         Address = "The Louvre",
                         Attendees = new List<AppointmentAttendee>
@@ -84,7 +84,7 @@ namespace Persistence
                         Title = "Future Appointment 1",
                         Date = DateTime.UtcNow.AddMonths(1),
                         Description = "Appointment 1 month in future",
-                        Category = "music",
+                        Category = "doctor",
                         City = "London",
                         Address = "Wembly Stadium",
                         Attendees = new List<AppointmentAttendee>
@@ -106,7 +106,7 @@ namespace Persistence
                         Title = "Future Appointment 2",
                         Date = DateTime.UtcNow.AddMonths(2),
                         Description = "Appointment 2 months in future",
-                        Category = "food",
+                        Category = "housing",
                         City = "London",
                         Address = "Jamies Italian",
                         Attendees = new List<AppointmentAttendee>
@@ -128,7 +128,7 @@ namespace Persistence
                         Title = "Future Appointment 3",
                         Date = DateTime.UtcNow.AddMonths(3),
                         Description = "Appointment 3 months in future",
-                        Category = "drinks",
+                        Category = "leisure",
                         City = "London",
                         Address = "Pub",
                         Attendees = new List<AppointmentAttendee>
@@ -150,7 +150,7 @@ namespace Persistence
                         Title = "Future Appointment 4",
                         Date = DateTime.UtcNow.AddMonths(4),
                         Description = "Appointment 4 months in future",
-                        Category = "culture",
+                        Category = "money",
                         City = "London",
                         Address = "British Museum",
                         Attendees = new List<AppointmentAttendee>
@@ -167,7 +167,7 @@ namespace Persistence
                         Title = "Future Appointment 5",
                         Date = DateTime.UtcNow.AddMonths(5),
                         Description = "Appointment 5 months in future",
-                        Category = "drinks",
+                        Category = "money",
                         City = "London",
                         Address = "Punch and Judy",
                         Attendees = new List<AppointmentAttendee>
@@ -189,7 +189,7 @@ namespace Persistence
                         Title = "Future Appointment 6",
                         Date = DateTime.UtcNow.AddMonths(6),
                         Description = "Appointment 6 months in future",
-                        Category = "music",
+                        Category = "housing",
                         City = "London",
                         Address = "O2 Arena",
                         Attendees = new List<AppointmentAttendee>
@@ -211,7 +211,7 @@ namespace Persistence
                         Title = "Future Appointment 7",
                         Date = DateTime.UtcNow.AddMonths(7),
                         Description = "Appointment 7 months in future",
-                        Category = "travel",
+                        Category = "doctor",
                         City = "Berlin",
                         Address = "All",
                         Attendees = new List<AppointmentAttendee>
@@ -233,7 +233,7 @@ namespace Persistence
                         Title = "Future Appointment 8",
                         Date = DateTime.UtcNow.AddMonths(8),
                         Description = "Appointment 8 months in future",
-                        Category = "drinks",
+                        Category = "work",
                         City = "London",
                         Address = "Pub",
                         Attendees = new List<AppointmentAttendee>

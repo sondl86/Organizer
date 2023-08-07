@@ -29,7 +29,7 @@ export default observer(function AppointmentDetail() {
                 <AppointmentDetailedChat />
             </Grid.Column>
             <Grid.Column width={6}>
-                <AppointmentDetailedSidebar />
+                <AppointmentDetailedSidebar appointment={appointment} />
             </Grid.Column>
         </Grid>
     )

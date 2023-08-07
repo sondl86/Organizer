@@ -3,7 +3,7 @@ import { Button, Header, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Appointment } from "../../../app/models/Appointment";
+import { AppointmentFormValues } from "../../../app/models/Appointment";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import {v4 as uuid} from "uuid"
 import { Formik, Form } from "formik";
@@ -17,19 +17,11 @@ import MyDateInput from "../../../app/common/form/MyDateInput";
 export default observer(function AppointmentForm () {
 
     const {appointmentStore} = useStore()
-    const {selectedAppointment, createAppointment, updateAppoitment, loading, loadAppointment, loadingInitial} = appointmentStore
+    const {createAppointment, updateAppointment, loadAppointment, loadingInitial} = appointmentStore
     const {id} = useParams()
     const navigate = useNavigate()
 
-    const [appointment, setAppointment] = useState<Appointment>({
-        id: '',
-        title: '',
-        category: '',
-        description: '',
-        date: null,
-        city: '',
-        address: ''
-    });
+    const [appointment, setAppointment] = useState<AppointmentFormValues>(new AppointmentFormValues());
 
     const validationSchema = Yup.object({
         title: Yup.string().required('The appointment title is required'),
@@ -42,15 +34,19 @@ export default observer(function AppointmentForm () {
     })
 
     useEffect(() => {
-        if (id) loadAppointment(id).then(appointment => setAppointment(appointment!))
+       // console.log("Form:", appointment)
+        if (id) loadAppointment(id).then(appointment => setAppointment(new AppointmentFormValues(appointment)))
     },[id, loadAppointment])
 
-    function handleFormSubmit(appointment: Appointment){
+    function handleFormSubmit(appointment: AppointmentFormValues){
         if (!appointment.id) {
-            appointment.id = uuid()
-            createAppointment(appointment).then(() => navigate(`/appointments/${appointment.id}`))
+            let newAppointment = {
+                ...appointment,
+                id : uuid()
+            }
+            createAppointment(newAppointment).then(() => navigate(`/appointments/${newAppointment.id}`))
         }else{
-            updateAppoitment(appointment).then(() => navigate(`/appointments/${appointment.id}`))
+            updateAppointment(appointment).then(() => navigate(`/appointments/${appointment.id}`))
         }
     }
 
@@ -83,7 +79,7 @@ export default observer(function AppointmentForm () {
                         <MyTextInput placeholder="Address" name='address' />
                         <Button 
                             disabled={isSubmitting || !dirty || !isValid}
-                            loading={loading} floated="right" 
+                            loading={isSubmitting} floated="right" 
                             color="yellow" type="submit" 
                             content="Submit"/>
                         <Button as={Link} to='/appointments' floated="right" type="button" content="Cancel"/>

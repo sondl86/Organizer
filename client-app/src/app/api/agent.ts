@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { Appointment } from '../models/Appointment';
+import { Appointment, AppointmentFormValues } from '../models/Appointment';
 import { toast } from 'react-toastify';
 import { router } from '../router/Routes';
 import { store } from '../stores/store';
@@ -74,10 +74,11 @@ const requests = {
 
 const Appointments = {
     list: () => requests.get<Appointment[]>('/appointments'),
-    details: (id: string) => requests.get<Appointment>(`appointments/${id}`),
-    create: (appointment: Appointment) => requests.post<void>('appointments',appointment),
-    update: (appointment: Appointment) => requests.put<void>(`appointments/${appointment.id}`,appointment),
-    delete: (id: string) => requests.del<void>(`appointments/${id}`)
+    details: (id: string) => requests.get<Appointment>(`/appointments/${id}`),
+    create: (appointment: AppointmentFormValues) => requests.post<void>('/appointments',appointment),
+    update: (appointment: AppointmentFormValues) => requests.put<void>(`/appointments/${appointment.id}`,appointment),
+    delete: (id: string) => requests.del<void>(`/appointments/${id}`),
+    attend: (id: string) => requests.post<void>(`/appointments/${id}/attend`, {})
 }
 
 const Account = {

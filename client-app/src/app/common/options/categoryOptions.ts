@@ -3,5 +3,5 @@ export const categoryOptions = [
     {text: 'Housing', value:'housing'},
     {text: 'Leisure', value:'leisure'},
     {text: 'Work', value:'work'},
-    {text: 'Money/Insurance/Tax', value:'money/insurance/tax'},
+    {text: 'Money', value:'money'},
 ]
