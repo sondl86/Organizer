@@ -12,6 +12,8 @@ namespace Persistence
 
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<AppointmentAttendee> AppointmentAttendees { get; set; }
+
+        public DbSet<Photo> Photos { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

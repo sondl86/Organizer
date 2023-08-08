@@ -14,7 +14,7 @@ namespace Application.Appointments
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
-        public DataContext _context { get; }
+            private readonly DataContext _context;
 
             public Handler(DataContext context){
                 _context = context;
