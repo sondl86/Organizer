@@ -19,12 +19,12 @@ export default function AppointmentListItem({appointment}: Props) {
                 }
                 <Item.Group>
                     <Item>
-                        <Item.Image style={{ marginBottom: 5}} size="tiny" circular src="/assets/user.png"/>
+                        <Item.Image style={{ marginBottom: 5}} size="tiny" circular src={appointment.host?.image || 'assets/user.png'}/>
                         <Item.Content>
                             <Item.Header as={Link} to={`/appointments/${appointment.id}`}>
                                 {appointment.title}
                             </Item.Header>
-                            <ItemDescription>Hosted by {appointment.host?.displayName}</ItemDescription>
+                            <ItemDescription>Hosted by <Link to={`/profiles/${appointment.hostUserName}`}>{appointment.host?.displayName}</Link></ItemDescription>
                             {appointment.isHost && (
                                 <Item.Description>
                                     <Label basic color='orange'>

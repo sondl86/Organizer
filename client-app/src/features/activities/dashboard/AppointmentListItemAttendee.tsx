@@ -1,9 +1,9 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { Image, List, Popup } from "semantic-ui-react";
 import { Profile } from "../../../app/models/Profile";
 import { Link } from "react-router-dom";
 import ProfileCard from "../../profiles/ProfileCard";
+import { List, Popup, Image } from "semantic-ui-react";
 
 interface Props {
     attendees: Profile [];
