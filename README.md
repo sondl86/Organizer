@@ -1,6 +1,39 @@
-# Organizer
+# Personal Organizer
 
-Building an app with .Net Core and React
+**Personal Organizer** is an app using .Net 7.0, React 18 (with TypeScript) and MobX.
+
+## BACKEND 
+
+* Clean Architecture and the CQRS + Mediator pattern. This is for separate reads and writes operations in applications. In this pattern read processes are called ‘Queries’ and Write processes are called ‘Commands’. 
+
+* Setting up and configuring ASP.NET Core identity for authentication
+
+* Adding Photo Upload widget and creating user profile pages 
+* Entity Framework as the Object Relational Mapper (C# code generates SQL queries to communicate with SQL database)
+
+* Using AutoMapper in ASP.NET Core
+
+* Seeding data for Developing process
+
+* Migrations: generates code for the schema of the DB (Designer creates the migration)
+
+* Services give us more functionality to our logic. We use dependency injection to use Services in other classes inside our app
+
+* HTTP – Middleware: things we can do with the HTTP request when it comes in and when it goes out
+
+
+## FRONTEND
+
+* single page application with React framework and TypeScript
+
+* client side login and register function 
+
+* MobX as State Management System
+
+* UI using Semantic UI library
+
+
+### How to start the app
 
 # to start the Frontend
 got to client-app folder
